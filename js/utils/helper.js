@@ -13,6 +13,24 @@ function getElements(selectors) {
 }
 
 /**
+ * Function to display error message by DOM ID
+ * @param {string} idError - The ID of the DOM element to display the error message
+ * @param {string} messError - The error message to display
+ */
+function displayErrorMessage(idError, messError) {
+  const errorElement = document.querySelector(idError);
+
+  if (errorElement) {
+    if (messError === "") {
+      errorElement.classList.remove("d-inline-block");
+    } else {
+      errorElement.classList.add("d-inline-block");
+      errorElement.innerHTML = messError;
+    }
+  }
+}
+
+/**
  * Function reset inputs field form
  */
 function resetInputsField() {
@@ -22,11 +40,19 @@ function resetInputsField() {
 }
 
 /**
+ * Function reset mess error
+ */
+function resetMessError() {
+  const spansEle = getElements(QUERY_SELECTORS.SPANS_MESS);
+  spansEle.forEach((span) => displayErrorMessage(`#${span.id}`, ""));
+}
+
+/**
  * Handle button
  * @param queryBtn {string}
  * @param status {boolean}
  */
-const handleButton = (queryBtn, status) =>
+const disableButton = (queryBtn, status) =>
   (document.querySelector(queryBtn).disabled = status);
 
 /**
@@ -49,8 +75,6 @@ const findDataByCallback = (data, callback) => data.filter(callback);
  */
 function render(list) {
   const tableID = document.querySelector(QUERY_SELECTORS.TABLE);
-
-  // FIX: 👇Handle error when no data ${TITLE_EMPLOYEE[item.titleEmp].text}
 
   let content = list.map((item) => {
     return `
